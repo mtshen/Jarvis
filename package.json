@@ -1,0 +1,13 @@
+{
+    "name": "hello-ruff",
+    "version": "0.1.0",
+    "description": "",
+    "author": "",
+    "main": "src/index.js",
+    "ruff": {
+        "dependencies": {
+            "relay-1c": "^2.0.5"
+        },
+        "version": 1
+    }
+}
