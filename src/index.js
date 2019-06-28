@@ -16,7 +16,6 @@ var socketStatus = require('./socket/isStatus');
 var triggerStrategy = require('./socket/triggerStrategy');
 
 // 硬件模块
-var swit = require('./device/swit');
 var contactorRelay = require('./device/contactorRelay');
 
 /* 一些常量 */
@@ -58,23 +57,14 @@ function netConnent() {
       var messageInfo = JSON.parse(data.toString());
       var msgType = messageInfo.msgType;
       var handle = socketHandle[msgType];
-
       if (!triggerStrategy(msgType)) {
-         try {
-            handle && handle.handle(client, messageInfo, device);
-         } catch (error) {
-            client.write({
-               code: 1,
-               data: msgType,
-               msg: '设备错误!',
-               msgType: 'com.common.server.error',
-            });
-            console.log(error.message);
-         }
+         triggerStrategy.on(msgType);
+         handle && handle.handle(client, messageInfo, device);
+         triggerStrategy.off(msgType);
       }
    });
 
-   // 断线重连
+   // 断线重连 === ===
    client.on('close', function() {
       socketStatus.close(client);
       setTimeout(function() {
