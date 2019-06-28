@@ -37,10 +37,10 @@ function initWebSocket(ws) {
 
   // web端接收消息
   ws.on('message', function (message) {
-    const messageInfo = JSON.parse(message);
-    const { msgType } = messageInfo;
-    const handle = socketHandle[msgType];
     try {
+      const messageInfo = JSON.parse(message);
+      const { msgType } = messageInfo;
+      const handle = socketHandle[msgType];
       handle && handle.handle.call(ws, messageInfo, sendRuffSocket);
     } catch (error) {
       sendWebSocket({
@@ -71,11 +71,10 @@ function initWebSocket(ws) {
 function initRuffSocket(socket) {
   ruffSocketConnentionList.push(socket);
   socket.on('data', (data)=>{
-    const messageInfo = JSON.parse(data.toString());
-    const { msgType } = messageInfo;
-    const handle = socketHandle[msgType];
-
     try {
+      const messageInfo = JSON.parse(data.toString());
+      const { msgType } = messageInfo;
+      const handle = socketHandle[msgType];
       handle && handle.handle.call(socket, messageInfo, sendWebSocket);
     } catch (error) {
       sendRuffSocket({
