@@ -1,7 +1,7 @@
 <template>
   <d2-container>
     <template slot="header">input 总览</template>
-    
+
     <template slot="footer">
       <el-table
         :data="inputOption"
@@ -62,11 +62,3 @@ export default {
 <style scoped lang="scss">
 
 </style>
-0, 0
-5, 5
-
-
-
-
-5, 0
-0, 5
