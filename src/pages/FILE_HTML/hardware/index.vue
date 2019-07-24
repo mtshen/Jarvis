@@ -19,15 +19,15 @@ export default {
       // 当前城市
       currentCity: '110113',
       // 当前城市数据近4天数据
-      // str.push('<p>城市/区：' + data.city + '</p>');
-      // str.push('<p>天气：' + data.weather + '</p>');
-      // str.push('<p>温度：' + data.temperature + '℃</p>');
-      // str.push('<p>风向：' + data.windDirection + '</p>');
-      // str.push('<p>风力：' + data.windPower + ' 级</p>');
-      // str.push('<p>空气湿度：' + data.humidity + '</p>');
-      // str.push('<p>发布时间：' + data.reportTime + '</p>');
+      // 城市/区：data.city
+      // 天气：data.weather
+      // 温度：data.temperature
+      // 风向：data.windDirection
+      // 风力：data.windPower
+      // 空气湿度：data.humidity
+      // 发布时间：data.reportTime
+      futureCityWeather: {},
       currentCityWeather: {},
-      futureCityWeatherList: [],
     };
   },
   computed: {
@@ -65,7 +65,7 @@ export default {
     aMapWeatherWeatherInfo_all() {
       aMapWeatherWeatherInfo(this.currentCity, 'all').then((data) => {
         if (data.status === '1') {
-          this.futureCityWeatherList = data.forecasts[0];
+          this.futureCityWeather = data.forecasts[0];
         }
       });
     }
