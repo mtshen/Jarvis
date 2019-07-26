@@ -29,3 +29,15 @@ export function aMapWeatherWeatherInfo (city, extensions = 'base') {
     method: 'get'
   })
 };
+
+// IP查询定位信息
+export function aMapWeatherIpGetCity (ip) {
+  const key = 'b67f628ffc6474eab2c6574921fd06b1'
+  const output = 'JSON'
+
+  return axios({
+    url: 'https://restapi.amap.com/v3/ip',
+    params: { key, output, ip },
+    method: 'get'
+  })
+};

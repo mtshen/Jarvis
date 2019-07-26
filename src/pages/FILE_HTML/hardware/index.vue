@@ -1,5 +1,8 @@
 <template>
   <div class="hardwareBox">
+    <div class="hardwareTime">21:40</div>
+    <div class="hardwareDate">2019年07月24日星期三</div>
+    <div></div>
     <!-- 今日天气 -->
     <!-- 当前时间 -->
     <!-- 当前日期 -->
@@ -9,7 +12,7 @@
 
 
 <script>
-import { aMapWeatherWeatherInfo } from '@/api/account';
+import { aMapWeatherWeatherInfo, aMapWeatherIpGetCity } from '@/api/account';
 import { setInterval } from 'timers';
 export default {
   props: {
@@ -17,7 +20,8 @@ export default {
   data() {
     return {
       // 当前城市
-      currentCity: '110113',
+      currentCity: '',
+      autoCurrentCity: '',
       // 当前城市数据近4天数据
       // 城市/区：data.city
       // 天气：data.weather
@@ -36,13 +40,23 @@ export default {
   created() {
   },
   mounted() {
-    // 获取天气
-    this.startGetAMapWeatherWeatherInfo();
+    // 获取位置信息
+    this.getAutoCurrentCity().then(() => {
+      // 获取天气
+      this.startGetAMapWeatherWeatherInfo();
+    });
   },
   watch: {
 
   },
   methods: {
+    // 根据IP获取当前位置
+    getAutoCurrentCity() {
+      return aMapWeatherIpGetCity().then((data) => {
+        return this.autoCurrentCity = data.adcode;
+      });
+    },
+
     // 获取天气数据, 近4天天气数据, 每天只更新4次, 每6小时更新一次
     // 今日天气数据, 每分钟更新一次
     startGetAMapWeatherWeatherInfo() {
@@ -54,7 +68,7 @@ export default {
 
     // 获取今日天气数据
     aMapWeatherWeatherInfo_base() {
-      aMapWeatherWeatherInfo(this.currentCity).then((data) => {
+      aMapWeatherWeatherInfo(this.currentCity || this.autoCurrentCity).then((data) => {
         if (data.status === '1') {
           this.currentCityWeather = data.lives[0];
         }
@@ -63,7 +77,7 @@ export default {
 
     // 获取近4天天气数据
     aMapWeatherWeatherInfo_all() {
-      aMapWeatherWeatherInfo(this.currentCity, 'all').then((data) => {
+      aMapWeatherWeatherInfo(this.currentCity || this.autoCurrentCity, 'all').then((data) => {
         if (data.status === '1') {
           this.futureCityWeather = data.forecasts[0];
         }
@@ -80,7 +94,29 @@ export default {
 .hardwareBox {
   width: 100%;
   height: 100%;
-  background: #000;
   color: #FFF;
+  background: #000;
+  position: relative;
+
+  .hardwareDate {
+    width: 100%;
+    bottom: 1rem;
+    font-size: 5rem;
+    text-align: right;
+    position: absolute;
+    padding-right: 1rem;
+    box-sizing:border-box;
+  }
+
+  .hardwareTime {
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    font-size: 15rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    position: absolute;
+    text-align: center;
+  }
 }
 </style>
