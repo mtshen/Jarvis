@@ -1,24 +1,28 @@
 <template>
-  <div class="hardwareBox">
-    <div class="hardwareTime">21:40</div>
-    <div class="hardwareDate">2019年07月24日星期三</div>
+  <div class="hardwareBox" ref="hardwareBox" :style="{fontSize: `${fontSize}px`}">
+    <div class="hardwareTime">
+      {{currentMoment.hour}}:{{currentMoment.minute}}
+      <span class="second">{{currentMoment.second}}</span>
+    </div>
+    <div class="hardwareDate">
+      {{currentMoment.year}}年{{currentMoment.month}}月{{currentMoment.day}}日星期{{weekParseList[currentMoment.week]}}
+    </div>
     <div></div>
     <!-- 今日天气 -->
-    <!-- 当前时间 -->
-    <!-- 当前日期 -->
-    <!-- 周 -->
   </div>
 </template>
 
 
 <script>
 import { aMapWeatherWeatherInfo, aMapWeatherIpGetCity } from '@/api/account';
-import { setInterval } from 'timers';
+import * as moment from 'moment';
+
 export default {
   props: {
   },
   data() {
     return {
+      fontSize: 12,
       // 当前城市
       currentCity: '',
       autoCurrentCity: '',
@@ -32,6 +36,8 @@ export default {
       // 发布时间：data.reportTime
       futureCityWeather: {},
       currentCityWeather: {},
+      currentMoment: {},
+      weekParseList: ['', '一', '二', '三', '四', '五', '六', '日'],
     };
   },
   computed: {
@@ -40,11 +46,20 @@ export default {
   created() {
   },
   mounted() {
+    // 界面大小自适应
+    window.removeEventListener('resize', this.hardwareBoxEMResize);
+    window.addEventListener('resize', this.hardwareBoxEMResize);
+    this.hardwareBoxEMResize();
+
     // 获取位置信息
     this.getAutoCurrentCity().then(() => {
       // 获取天气
       this.startGetAMapWeatherWeatherInfo();
     });
+
+    // 获取时区信息
+    this.getHardwareDate();
+    setInterval(() => this.getHardwareDate(), 1000);
   },
   watch: {
 
@@ -82,7 +97,34 @@ export default {
           this.futureCityWeather = data.forecasts[0];
         }
       });
-    }
+    },
+
+    // 界面自适应
+    hardwareBoxEMResize() {
+      const hardwareBoxElement = this.$refs.hardwareBox;
+      const { offsetWidth } = hardwareBoxElement;
+      this.fontSize = parseInt(offsetWidth / 100, 10);
+    },
+
+    // 获取日期/星期/时间等数据
+    getHardwareDate() {
+      const currentMoment = moment();
+      const second = currentMoment.second();    // 秒
+      const minute = currentMoment.minute();    // 分钟
+      const hour = currentMoment.hour();        // 小时
+      const day = currentMoment.date();         // 天
+      const week = currentMoment.weekday();     // 星期
+      const month = currentMoment.month() + 1;  // 月
+      const quarter = currentMoment.quarter();  // 季度
+      const year = currentMoment.year();        // 年
+      this.currentMoment = {
+        second: second < 10 ? `0${second}` : second,
+        minute: minute < 10 ? `0${minute}` : minute,
+        hour: hour < 10 ? `0${hour}` : hour,
+        day: day < 10 ? `0${day}` : day,
+        month: month < 10 ? `0${month}` : month,
+        week, quarter, year };
+    },
   },
   components: {
 
@@ -100,23 +142,26 @@ export default {
 
   .hardwareDate {
     width: 100%;
-    bottom: 1rem;
-    font-size: 5rem;
+    bottom: 1em;
+    font-size: 4em;
     text-align: right;
     position: absolute;
-    padding-right: 1rem;
+    padding-right: 1em;
     box-sizing:border-box;
   }
 
   .hardwareTime {
     top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    font-size: 15rem;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10em;
     position: absolute;
     text-align: center;
+    .second {
+      text-indent: -0.5em;
+      display: inline-block;
+      font-size: 0.4em;
+    }
   }
 }
 </style>
