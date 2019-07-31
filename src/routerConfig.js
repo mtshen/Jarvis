@@ -11,7 +11,7 @@ import HeaderAside from './layouts/HeaderAside'; // 变量名 routerConfig 为 i
 import JARVIS_UTILS from './pages/FILE_HTML/JARVIS_UTILS';
 import HTML_INPUT from './pages/FILE_HTML/HTML_INPUT';
 import HTML_LOG from './pages/FILE_HTML/HTML_LOG'; // ice 会自动在这个变量下添加路由数据
-import Hardware from './pages/FILE_HTML/hardware'; // 家庭式主机界面
+import Hardware from './pages/hardware'; // 家庭式主机界面
 // 请不要修改名称
 // 备注 ice 自动添加的路由记录是以下格式
 // {
