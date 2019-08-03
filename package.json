@@ -18,6 +18,7 @@
     "better-scroll": "^1.12.1",
     "element-ui": "^2.4.4",
     "js-cookie": "^2.2.0",
+    "js-md5": "^0.7.3",
     "lodash.uniqueid": "^4.0.1",
     "lowdb": "^1.0.0",
     "mockjs": "^1.0.1-beta3",

@@ -2,7 +2,7 @@
   <div class="hardwareBox" ref="hardwareBox" :style="{fontSize: `${fontSize}px`}">
     <!-- 输出 -->
     <!-- 声音交互可视 -->
-    <textOutput value="哈哈哈哈哈哈哈哈哈" class="hardwareTextOutput" :timeOut="0"/>
+    <textOutput ref="textOutput" value="" class="hardwareTextOutput" :timeOut="0"/>
 
     <!-- 输入 -->
     <!-- 天气感知 -->
@@ -35,6 +35,9 @@ export default {
     window.removeEventListener('resize', this.hardwareBoxEMResize);
     window.addEventListener('resize', this.hardwareBoxEMResize);
     this.hardwareBoxEMResize();
+
+    // 调试
+    window.edith = this.$refs;
   },
   watch: {
 

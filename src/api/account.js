@@ -41,3 +41,8 @@ export function aMapWeatherIpGetCity (ip) {
     method: 'get'
   })
 };
+
+// 讯飞语音合成
+export function xfyunServiceV1Tts (headers, text) {
+  return axios.post('http://api.xfyun.cn/v1/service/v1/tts', { text }, { headers })
+};
